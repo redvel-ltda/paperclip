@@ -329,7 +329,7 @@ module Paperclip
       min     = options[:greater_than] || (options[:in] && options[:in].first) || 0
       max     = options[:less_than]    || (options[:in] && options[:in].last)  || (1.0/0)
       range   = (min..max)
-      message = options[:message] || "file size must be between :min and :max bytes"
+      message = options[:message] || I18n.translate("paperclip.errors.attachment.size", :default => "file size must be between :min and :max bytes")
       message = message.call if message.respond_to?(:call)
       message = message.gsub(/:min/, min.to_s).gsub(/:max/, max.to_s)
 
@@ -386,7 +386,7 @@ module Paperclip
       validates_each(:"#{name}_content_type", validation_options) do |record, attr, value|
         if !allowed_types.any?{|t| t === value } && !(value.nil? || value.blank?)
           if record.errors.method(:add).arity == -2
-            message = options[:message] || "is not one of #{allowed_types.join(", ")}"
+            message = options[:message] || I18n.translate("paperclip.errors.attachment.content_type", :default => "is not one of #{allowed_types.join(", ")}")
             message = message.call if message.respond_to?(:call)
             record.errors.add(:"#{name}_content_type", message)
           else
@@ -439,7 +439,7 @@ module Paperclip
         attachment.send(:queue_existing_for_delete)
       end
     end
-
+    
   end
 
 end
